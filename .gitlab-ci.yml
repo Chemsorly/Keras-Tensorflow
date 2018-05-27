@@ -1,0 +1,30 @@
+stages:
+    - build
+
+build-ubuntu:
+  stage: build
+  only:
+    - master
+  tags:
+    - docker
+    - shell
+    - ubuntu
+
+  script:
+    - sudo docker build -t chemsorly/keras-tensorflow:latest-ubuntu-py2-cpu -t chemsorly/keras-tensorflow:$PROJECT_VERSION-ubuntu-py2-cpu -f dockerfiles/keras-tensorflow-ubuntu-py2-cpu.dockerfile .
+    - sudo docker build -t chemsorly/keras-tensorflow:latest-ubuntu-py3-cpu -t chemsorly/keras-tensorflow:$PROJECT_VERSION-ubuntu-py3-cpu -f dockerfiles/keras-tensorflow-ubuntu-py3-cpu.dockerfile .
+    - sudo docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+    - sudo docker push chemsorly/keras-tensorflow:$PROJECT_VERSION-ubuntu-py2-cpu
+    - sudo docker push chemsorly/keras-tensorflow:$PROJECT_VERSION-ubuntu-py3-cpu
+    - sudo docker push chemsorly/keras-tensorflow:latest-ubuntu-py2-cpu
+    - sudo docker push chemsorly/keras-tensorflow:latest-ubuntu-py3-cpu
+    - sudo docker build -t chemsorly/keras-tensorflow:latest-ubuntu-py2-gpu -t chemsorly/keras-tensorflow:$PROJECT_VERSION-ubuntu-py2-gpu -f dockerfiles/keras-tensorflow-ubuntu-py2-gpu.dockerfile .
+    - sudo docker build -t chemsorly/keras-tensorflow:latest-ubuntu-py3-gpu -t chemsorly/keras-tensorflow:$PROJECT_VERSION-ubuntu-py3-gpu -f dockerfiles/keras-tensorflow-ubuntu-py3-gpu.dockerfile .
+    - sudo docker push chemsorly/keras-tensorflow:$PROJECT_VERSION-ubuntu-py2-gpu
+    - sudo docker push chemsorly/keras-tensorflow:$PROJECT_VERSION-ubuntu-py3-gpu
+    - sudo docker push chemsorly/keras-tensorflow:latest-ubuntu-py2-gpu
+    - sudo docker push chemsorly/keras-tensorflow:latest-ubuntu-py3-gpu
+    - sudo docker rmi chemsorly/keras-tensorflow:latest-ubuntu-py2-cpu
+    - sudo docker rmi chemsorly/keras-tensorflow:latest-ubuntu-py3-cpu
+    - sudo docker rmi chemsorly/keras-tensorflow:latest-ubuntu-py2-gpu
+    - sudo docker rmi chemsorly/keras-tensorflow:latest-ubuntu-py3-gpu
