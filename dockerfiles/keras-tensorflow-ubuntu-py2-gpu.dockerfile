@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python-pip \
     python-dev \
     python-setuptools \
+    libgomp1 \
     && \
     # Clean-up
     apt-get -y autoremove \
